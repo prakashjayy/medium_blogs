@@ -149,11 +149,9 @@ with mnist_graph.as_default():
     	py_x = model(X,w1,w2,w3,w4,w5,w6,w7,b1,b2,b3,b4,b5,b6,b7)
 
     # Build a Graph that computes predictions from the inference model.
-    tf.add_to_collection("py_x", py_x)  # Remember this Op.
 
     with tf.name_scope("Loss"):
     	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(py_x,Y))
-    tf.scalar_summary("Loss",cost)
     
     with tf.name_scope("optimizer"):
     	train_op = tf.train.GradientDescentOptimizer(0.0001).minimize(cost)
@@ -162,8 +160,6 @@ with mnist_graph.as_default():
     	predict_op = tf.argmax(py_x,1)
     	correct_prediction = tf.equal(tf.argmax(Y,1),predict_op)
     	accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
-    tf.scalar_summary("accuracy",accuracy)
-
 
     validy_x = tf.argmax(tf.nn.softmax(model(valid_X,w1,w2,w3,w4,w5,w6,w7,b1,b2,b3,b4,b5,b6,b7),name = "Valid"),1) # No need to keep probabilities here 
     test_pyx = tf.nn.softmax(model(test_X,w1,w2,w3,w4,w5,w6,w7,b1,b2,b3,b4,b5,b6,b7),name="test") # No need to keep the probabilities here. We will use the entire network.
@@ -173,13 +169,10 @@ with mnist_graph.as_default():
 
     # Create a saver for writing training checkpoints.
     saver = tf.train.Saver()
-    merged_summary_op = tf.merge_all_summaries()
-
-logs_path = "tmp/tensorflow_logs/example"
+    
 with tf.Session(graph=mnist_graph) as sess:
 	sess.run(init)
-	summary_writer = tf.train.SummaryWriter(logs_path,sess.graph)
-	n_iterations = 20
+	n_iterations = 200
 	batch_size = 100
 	for i in range(n_iterations):
 		idxs = np.random.permutation(range(len(trX)))
@@ -187,27 +180,18 @@ with tf.Session(graph=mnist_graph) as sess:
 		for batch_i in range(n_batches):
 			idxs_i = idxs[batch_i * batch_size: (batch_i + 1) * batch_size]
 			_,c,summary=sess.run([train_op,cost,merged_summary_op],feed_dict= {X:trX[idxs_i],Y:trY[idxs_i]})
-			summary_writer.add_summary(summary,batch_i+1)
 		if i%10 ==0:
 			save_path = saver.save(sess,"model.mnist1")
 			print("Model is saved in file: %s" % save_path)
 			print (i,"Accuracy:",np.mean(np.argmax(trY,axis=1) == sess.run(predict_op,feed_dict={X:trX,Y:trY})), 
 			"Valid_Acc:",np.mean(np.argmax(valY,axis=1) == sess.run(validy_x)))
 	print ("Optimization Finished")
-	print ("Run the command line:\n"\
-		"--> tensorboard --logdir=/tmp/tensorflow_logs "\
-		"\nThen open http://0.0.0.0.6006/ into your web browser")
-
 
 
 # Testing Accuarcy 
 	correct_prediction = tf.equal(tf.argmax(test_Y,1),tf.argmax(sess.run(test_pyx),1))
 	accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
 	print("Accuracy:",sess.run(accuracy))
-
-
-# Should add drop-outs to make sure that the model is not overfit
-# 
 
 
 # Restoring the model and test on external data
