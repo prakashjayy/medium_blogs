@@ -8,3 +8,7 @@ y = tf.mul(a,b)
 with tf.Session() as sess:
 	print ("%f should equal 2.0" % sess.run(y, feed_dict={a:1,b:2}))
 	print (sess.run(y,feed_dict = {a:1,b:6}))
+
+
+
+#Making small changes to test git 
