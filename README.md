@@ -4,8 +4,8 @@ This Repository contains all tensorflow tutorials . There might be some replicas
 
 Working with slim and graphs 
 
-- In tensorflow everything is defined as Graphs
+In tensorflow everything is defined as Graphs
 
-    import tensorflow as tf 
+    import tensorflow as tf  
     slim = tf.contrib.slim 
     
