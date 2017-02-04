@@ -2,8 +2,8 @@
 images easily. 
 
 Here we will be doing only one thing:  
-1) When u get a new set of images and you want to classify them, you can send these images through the imagenet trained inception network of your choice and extract features or weights of which every layer we like 
-2) With these extracted features as dependent variables we can apply any machine learning models and do classification 
+1) When u get a new set of images and you want to classify them, you can send these images through the imagenet trained inception network of your choice and extract features or weights of which ever layer we like.  
+2) With these extracted features as dependent variables we can apply any machine learning models and do classification.  
 
 Import Tensorflow:
 
@@ -24,7 +24,7 @@ Now to download the trained model run the following commands (it downloads 200MB
         tf.gfile.MakeDirs(checkpoints_dir)
     dataset_utils.download_and_uncompress_tarball(url, checkpoints_dir)
 
-Now import the model folder . Since we are using **inception** here, we will import inception file 
+Now import the model folder. Since we are using **inception** here, we will import inception file 
     
     from nets import inception
     image_size = inception.inception_v1.default_image_size
@@ -44,7 +44,7 @@ Now create a placeholder and  define the Graph:
         with slim.arg_scope(inception.inception_v1_arg_scope()):
         model = inception.inception_v1(X, num_classes=1001 , is_training = False) #(since ware not training this network, it is 1001 out classes) check the inception_v1.py file for more clarity
                 
-Check all the tensor names available in the graph and choose the filters(tensors) which you want to extract from it 
+Check all the tensor names available in the graph and choose the filters(tensors) which you want to extract from it. 
 
     sess = tf.Session()
     op = sess.graph.get_operations()
@@ -53,7 +53,7 @@ Check all the tensor names available in the graph and choose the filters(tensors
      #This is one of the tensor name (First conv layer filters) available
      Out[5]: (<tf.Tensor 'InceptionV1/InceptionV1/Conv2d_1a_7x7/convolution:0' shape=(?, 112, 112, 64) dtype=float32>,)  
    
-Now Here is a long length code. which will actually extract the features which you need, please follow through the code
+Now Here is a long length code. which will actually extract the features which we need, please follow through the code
 
     import numpy as np
     
