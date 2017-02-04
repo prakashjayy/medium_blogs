@@ -99,9 +99,10 @@ The wait is over . Now we can pull all the features from the particular layer an
         
  
  How to do machine leaning after getten the features?
- 1) Now since we get the features of each image in numpy array format. 
-      - Flatten it and create a dataframe
- 2) Apply multi-class SVM or XGBoost or Neural Networks of your choice.
- 3) Do hyperparameter tuning and select the best params (Check NeuPy for NN )
+ 1) Now since we get the features of each image in numpy array format.   
+      - Flatten it and create a dataframe  
+      
+ 2) Apply multi-class SVM or XGBoost or Neural Networks of your choice.  
  
- I will write another post on my findings
+ 3) Do hyperparameter tuning and select the best params (Check NeuPy for NN )  
+ 
