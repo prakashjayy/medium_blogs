@@ -1,4 +1,4 @@
-Transfer learning is very useful. Trained models have robust features which can be generalized to any batch of  
+**Transfer learning** is very useful. Trained models have robust features which can be generalized to any batch of  
 images easily. 
 
 Here we will be doing only one thing:  
@@ -24,7 +24,7 @@ Now to download the trained model run the following commands (it downloads 200MB
         tf.gfile.MakeDirs(checkpoints_dir)
     dataset_utils.download_and_uncompress_tarball(url, checkpoints_dir)
 
-Now import the model folder . Since we are using inception here, we will import inception file 
+Now import the model folder . Since we are using **inception** here, we will import inception file 
     
     from nets import inception
     image_size = inception.inception_v1.default_image_size
