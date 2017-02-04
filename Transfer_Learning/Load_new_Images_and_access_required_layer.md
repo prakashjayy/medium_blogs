@@ -10,12 +10,12 @@ Import Tensorflow:
     import tensorflow as tf
     slim = tf.contrib.slim
     
-2. Do a git pull to the [link](https://github.com/tensorflow/models) https://github.com/tensorflow/models.git. There is a folder called slim which again has the following folders 
-- datasets: used to download the required dataset
-- nets: All the network architecutres are present
-- preprocessing: Required preprocessing for the network to efficiently train is present here 
+Do a git pull to the [link](https://github.com/tensorflow/models) https://github.com/tensorflow/models.git. There is a folder called slim which again has the following folders 
+* datasets: used to download the required dataset
+* nets: All the network architecutres are present
+* preprocessing: Required preprocessing for the network to efficiently train is present here 
     
-3. Now to download the trained model run the following commands (it downloads 200MB file for inception netowork and 500MB for VGGNet
+Now to download the trained model run the following commands (it downloads 200MB file for inception netowork and 500MB for VGGNet
 
     from datasets import dataset_utils (required to download the trained model checkpoints)
     url = "http://download.tensorflow.org/models/inception_v1_2016_08_28.tar.gz"
@@ -24,13 +24,13 @@ Import Tensorflow:
         tf.gfile.MakeDirs(checkpoints_dir)
     dataset_utils.download_and_uncompress_tarball(url, checkpoints_dir)
 
-4. Now import the model folder . Since we are using inception here, we will import inception file 
+Now import the model folder . Since we are using inception here, we will import inception file 
     
     from nets import inception
     image_size = inception.inception_v1.default_image_size
     from preprocessing import inception_preprocessing #import the preprocessing file also 
    
-5. Now download your dataset, Here it is the list of image location that I need.
+Now download your dataset, Here it is the list of image location that I need.
 
     import cv2, os, glob
     filelist  = glob.glob("/kaggle-fish/data/ALB/*")
@@ -38,13 +38,13 @@ Import Tensorflow:
     
     Out[5]: '/kaggle-fish/data/ALB/img_00003.jpg'
     
-6. Now create a placeholder and  define the Graph:
+Now create a placeholder and  define the Graph:
     
     with tf.Graph().as_default():
         with slim.arg_scope(inception.inception_v1_arg_scope()):
         model = inception.inception_v1(X, num_classes=1001 , is_training = False) #(since ware not training this network, it is 1001 out classes) check the inception_v1.py file for more clarity
                 
-7. Check all the tensor names available in the graph and choose the filters(tensors) which you want to extract from it 
+Check all the tensor names available in the graph and choose the filters(tensors) which you want to extract from it 
 
     sess = tf.Session()
     op = sess.graph.get_operations()
@@ -53,7 +53,7 @@ Import Tensorflow:
      #This is one of the tensor name (First conv layer filters) available
      Out[5]: (<tf.Tensor 'InceptionV1/InceptionV1/Conv2d_1a_7x7/convolution:0' shape=(?, 112, 112, 64) dtype=float32>,)  
    
-8. Now Here is a long length code. which will actually extract the features which you need, please follow through the code
+Now Here is a long length code. which will actually extract the features which you need, please follow through the code
 
     import numpy as np
     
