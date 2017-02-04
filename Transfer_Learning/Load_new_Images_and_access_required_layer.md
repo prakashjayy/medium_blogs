@@ -98,7 +98,8 @@ The wait is over . Now we can pull all the features from the particular layer an
         X_pool3.append(features) 
         
  
- How to do machine leaning after getten the features?
+ How to do machine leaning after getten the features?  
+ 
  1) Now since we get the features of each image in numpy array format.   
       - Flatten it and create a dataframe  
       
