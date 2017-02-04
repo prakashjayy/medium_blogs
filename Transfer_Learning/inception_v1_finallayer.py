@@ -11,10 +11,6 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-
-
-
-
 tf.app.flags.DEFINE_string(
     'train_data', '/Users/Satish/Downloads/kaggle-fish/data/*',
     'Directory where the image files are present.')
@@ -28,8 +24,6 @@ tf.app.flags.DEFINE_string(
     'The name of the tensor which you want to access')
 
 FLAGS = tf.app.flags.FLAGS
-
-
 
 image_size = inception.inception_v1.default_image_size
 X = tf.placeholder(tf.float32, [None, image_size, image_size, 3])
