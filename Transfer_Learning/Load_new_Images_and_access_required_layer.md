@@ -80,7 +80,7 @@ The wait is over . Now we can pull all the features from the particular layer an
     for i in range(len(filelist[0:10])):
         img = cv2.imread(filelist[i])
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = tf.constant(img, tf.float32)
+        img = tf.constant(img, tf.float32) #Please don't use this function if you are dealing with large datasets, replace it with placeholders.
         
         # Preprocess the image 
         processed_image = inception_preprocessing.preprocess_image(img, image_size, image_size, is_training=False)
