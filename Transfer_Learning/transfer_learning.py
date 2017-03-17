@@ -64,9 +64,6 @@ with tf.Graph().as_default():
 init = tf.initialize_all_variables()
 restorer = tf.train.Saver()
 
-fi = FeatureIndexer(FLAGS.features_db,estNumImages=FLAGS.approx_images, maxBufferSize = FLAGS.max_buffer_size)
-print("[INFO] the database has been created")
-
 
 with tf.Session() as sess:
     sess.run(init)
@@ -79,10 +76,8 @@ with tf.Session() as sess:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         m = sess.run(processed_images,feed_dict={x:np.float32(img)})
         features = sess.run(p3,{X:m})
-        fi.add(filelist[i].rsplit("/")[-2],features.reshape([1,features.shape[3]]))
+      
 
-
-fi.finish()
 
 print("[INFO] All the features have been collected . Saving it to a dataframe now")
 # tags = [filelist[i].rsplit("/")[-2] for i in range(len(filelist))]
