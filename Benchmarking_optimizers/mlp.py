@@ -1,20 +1,15 @@
 """
 Tensorflow MLP optimizers benchmark with the same model:
 
-
 """
 
 
 import numpy as np
 import tensorflow as tf
 
-
-
 class BO():
     def __init__(self, x_train, y_train, x_valid, y_valid, x_test, y_test):
         """The class builds a MLP network and trains a model with the input data
-
-
 
         """
         self.x_train = x_train / 255.0
@@ -28,6 +23,34 @@ class BO():
         self.layers = {}
         self.train_step = None
 
+    def tf_optimizer(self, optimize, learning_rate = 0.001):
+
+        if optimize == 'adadelta':
+           optimizer = tf.train.AdadeltaOptimizer(
+               learning_rate)
+        elif optimize == 'adagrad':
+           optimizer = tf.train.AdagradOptimizer(
+               learning_rate)
+        elif optimize == 'adam':
+           optimizer = tf.train.AdamOptimizer(
+               learning_rate)
+        elif optimize == 'ftrl':
+           optimizer = tf.train.FtrlOptimizer(
+               learning_rate)
+        elif optimize == 'momentum':
+           optimizer = tf.train.MomentumOptimizer(
+               learning_rate,
+               momentum = 0.9,
+               name='Momentum')
+        elif optimize == 'rmsprop':
+           optimizer = tf.train.RMSPropOptimizer(
+               learning_rate)
+        elif optimize == 'sgd':
+           optimizer = tf.train.GradientDescentOptimizer(
+                learning_rate)
+
+        return optimizer
+
     def build_graph(self):
         self.layers["layer1"] = tf.contrib.layers.fully_connected(inputs = self.input, num_outputs = 256, activation_fn = tf.nn.relu, scope = "input")
         self.layers["layer2"] = tf.contrib.layers.fully_connected(inputs = self.layers["layer1"], num_outputs = 128, activation_fn = tf.nn.relu, scope = "fc2")
@@ -37,7 +60,7 @@ class BO():
         "argmax(out) = ", summarize= 20, first_n= 7)
         return self
 
-    def compile_graph(self, optimize = "adam", learning_rate = 0.001):
+    def compile_graph(self, optimize, learning_rate = 0.001):
         print ("[Using optimizer]:", optimize)
         with tf.name_scope("cross_entropy"):
             self._output = tf.reduce_mean(-tf.reduce_sum(self.output * tf.log(self.layers["layer3"]+0.00001),[1]))
@@ -49,42 +72,8 @@ class BO():
         tf.summary.scalar("accuracy", self._accuracy)
 
         with tf.name_scope("gradient_calculations"):
-            if optimize == 'adadelta':
-               optimizer = tf.train.AdadeltaOptimizer(
-                   learning_rate,
-                   rho=0.95,
-                   epsilon=1.0)
-            elif optimize == 'adagrad':
-               optimizer = tf.train.AdagradOptimizer(
-                   learning_rate,
-                   initial_accumulator_value=0.1)
-            elif optimize == 'adam':
-               optimizer = tf.train.AdamOptimizer(
-                   learning_rate,
-                   beta1=0.9,
-                   beta2=0.999,
-                   epsilon=1.0)
-            elif optimize == 'ftrl':
-               optimizer = tf.train.FtrlOptimizer(
-                   learning_rate,
-                   learning_rate_power=-0.5,
-                   initial_accumulator_value=0.1,
-                   l1_regularization_strength=0.0,
-                   l2_regularization_strength=0.0)
-            elif optimize == 'momentum':
-               optimizer = tf.train.MomentumOptimizer(
-                   learning_rate,
-                   momentum=0.9,
-                   name='Momentum')
-            elif optimize == 'rmsprop':
-               optimizer = tf.train.RMSPropOptimizer(
-                   learning_rate,
-                   decay=0.9,
-                   momentum=0.9,
-                   epsilon=1.0)
-            elif optimize == 'sgd':
-               optimizer = tf.train.GradientDescentOptimizer(learning_rate)
-            self.train_step = optimizer.minimize(self._output)
+          self.train_step = self.tf_optimizer(optimize).minimize(self._output)
+        
         return self
 
     def train(self,  batch_size = 32, epochs = 100, summary_dir = "/tmp/mnist"):
